@@ -56,4 +56,7 @@ router.post('/api/answer/create-answer', ansControler.copt);
 router.post('/api/result', resultController.userResult);
 
 
+router.post("/api/insert", qnControler.insertMany)
+
+
 module.exports = router

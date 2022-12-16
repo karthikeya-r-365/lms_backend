@@ -5,7 +5,7 @@ const answerSchema = new mongoose.Schema({
    
     question_id:{ type: ObjectId, ref:"questions", required: true},
 
-    answer:{type: Number, required: true},
+    answer:{type: String, required: true},
 
     isDeleted:{ type:Boolean, default: false},
 

@@ -111,4 +111,58 @@ const getQuestion_by_levelId_limit = async (req, res)=>{
     }
 }
 
-module.exports = {createQuestions, createQuestinsWithAnswer, getQuestions, getQuestionWithId, getQuestions_by_levelID, getQuestion_by_levelId_limit}
+const insertMany = async (req, res)=>{
+    try{
+
+        let data = req.body;
+
+        let {level_id, question_title, question_desc, question_img, question_points, options, answer} = data;
+
+        console.log(data.data.length)
+
+        let qnData = [];
+        let anData =[];
+
+        for(let i=0; i<data.data.length;i++){
+            if(data.data[i]){
+                qnData.push({
+                    level_id: data.data[i].level_id,
+                    question_title: data.data[i].question_title, 
+                    question_desc: data.data[i].question_desc, 
+                    question_img: data.data[i].question_img, 
+                    question_points: data.data[i].question_points, 
+                    options: data.data[i].options,
+                })
+           
+            }
+            if(data.data[i]){
+                anData.push({
+                    answer: data.data[i].answer
+                })
+            }
+        }
+        //console.log(qnData, anData )
+let inQN = await questionModel.insertMany(qnData) ;
+
+       // console.log([...inQN])
+        let qId = [];
+
+        
+
+        for(let j=0; j<inQN.length; j++){
+            if(inQN[j]){
+                anData[j]['question_id'] = inQN[j]._id
+            }
+        }
+console.log(anData)
+let fAns = await ansModel.insertMany(anData)
+        res.send({qn_data:inQN, ans_data:fAns  })
+
+
+    } catch(err){
+        console.log(err)
+        res.send({error: err})
+    }
+}
+
+module.exports = {createQuestions, createQuestinsWithAnswer, getQuestions, getQuestionWithId, getQuestions_by_levelID, getQuestion_by_levelId_limit, insertMany }
